@@ -1,11 +1,13 @@
 package BankAccount;
 
+import CustomExceptions.*;
+
 public class RonAccount extends BankAccount{
 
     @Override
     public Double getSumFromAccount() { return accountSum; }
 
-    public boolean transferMoneyAccount(BankAccount baDest, Double sum)
+    public boolean transferMoneyAccount(BankAccount baDest, Double sum) throws NotRONAccountException, InsufficientFundsException
     {
         boolean transferSuccessful = false;
 
@@ -20,11 +22,13 @@ public class RonAccount extends BankAccount{
             else
             {
                 /*Throw not enough money exception*/
+                throw new InsufficientFundsException("You don't have enough money!");
             }
         }
         else
         {
             /*Throw not RON accounts exception.*/
+            throw new NotRONAccountException("You can only transfer between RON accounts!");
         }
 
         return transferSuccessful;

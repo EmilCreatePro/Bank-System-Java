@@ -2,6 +2,7 @@ package Bank;
 
 import BankAccount.*;
 import Client.IClient;
+import CustomExceptions.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,7 +17,7 @@ public abstract class IBank {
         this.bankCode = bankCode;
     }
 
-    public boolean addClient(IClient client)
+    public boolean addClient(IClient client) throws AlreadyRegisteredClient
     {
         boolean clientAddedSuccesfuly = true;
 
@@ -26,7 +27,8 @@ public abstract class IBank {
             {
                 /*Throw Exception*/
                 clientAddedSuccesfuly = false;
-                return clientAddedSuccesfuly;
+                throw new AlreadyRegisteredClient("Client already exists!");
+                //return clientAddedSuccesfuly;
             }
         }
 
@@ -52,7 +54,7 @@ public abstract class IBank {
                 {
                     retString += "\tID: " +  acc.getAccountNumber() + "; Type: ";
                     retString += acc.isRonAccount() == true? "RON" : "EURO";
-                    retString += "; Total_Sum: " + client.getTotalSum() + "; Daily Interest: " + client.getDailyInterestRate();
+                    retString += "; Total_Sum: " + client.getTotalSum() + "; Daily Interest: " + client.getDailyInterestRate() + "\n";
                 }
 
                 break;
@@ -62,7 +64,7 @@ public abstract class IBank {
         return retString;
     }
 
-    public boolean transferMoneyBank(Integer accNr1,Integer accNr2, Double sumToTransfer)
+    public boolean transferMoneyBank(Integer accNr1,Integer accNr2, Double sumToTransfer) throws NoClientsException, MissingAccountException, MoneyTransferFailException
     {
         boolean transferSuccessful = false;
 
@@ -82,7 +84,8 @@ public abstract class IBank {
             if(tempClient == null)
             {
                 /*No clients. Throw exception for no clients in the bank!*/
-                break;
+                throw new NoClientsException("The bank has no clients to transfer the money!");
+                //break;
             }
             /*Search for the first account. The account from which we take the money.*/
             for(BankAccount acc : tempClient.getAccounts())
@@ -111,12 +114,21 @@ public abstract class IBank {
         if((srcAccountFound == false) || (dstAccountFound == false))
         {
             /*Throw Exception*/
+            throw new MissingAccountException("Some of the specified accounts are missing!");
         }
         /*If we reached this branch it means we have found both accounts.*/
         else
         {
-            /*If transfer is succesful then 'transferSuccesful'=true.*/
-            transferSuccessful = ((RonAccount)account1).transferMoneyAccount(account2, sumToTransfer);
+            /*If transfer is succesful then 'transferSuccesful' is true.*/
+            try {
+                transferSuccessful = ((RonAccount)account1).transferMoneyAccount(account2, sumToTransfer);
+            } catch (NotRONAccountException e) {
+                e.printStackTrace();
+            } catch (InsufficientFundsException e) {
+                e.printStackTrace();
+            }
+            if(transferSuccessful == false)
+                throw new MoneyTransferFailException("Could not transfer money!");
         }
 
         return transferSuccessful;

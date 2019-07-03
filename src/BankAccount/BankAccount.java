@@ -4,12 +4,12 @@ public abstract class BankAccount implements TotalSum {
     protected Integer accountNumber;
     protected Double accountSum;
 
+    public abstract boolean isRonAccount();
 
     public Double getAccountSum()
     {
         return accountSum;
     }
-    public abstract boolean isRonAccount();
 
     protected boolean subtractSum(Double sumToSubtract)
     {
@@ -18,11 +18,9 @@ public abstract class BankAccount implements TotalSum {
         /*If you don't have enough money you can't withdraw.*/
         if(sumToSubtract > accountSum)
         {
-            /*Throw Exception*/
+            /*Throw Exception -> not necessary here because we need the false value.*/
             retVal = false;
-            return  retVal;
         }
-
         else accountSum -= sumToSubtract;
 
         return retVal;
