@@ -25,6 +25,8 @@ public abstract class BankAccount implements TotalSum {
         if(sumToSubtract > accountSum)
         {
             /*Throw Exception -> not necessary here because we need the false value.*/
+            /*This add is necessary in order to keep the same sum in case of subtract fail.*/
+            accountSum += sumToSubtract;
             retVal = false;
         }
         else accountSum -= sumToSubtract;
