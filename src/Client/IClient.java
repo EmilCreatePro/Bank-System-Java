@@ -24,16 +24,28 @@ public abstract class IClient{
     {
         boolean patternCorrect = true;
 
-        String patternLetters = "^A-Z";
         String patternNr = "^0-9";
+
+        String sex="", year="", month="", day="", jj="";
 
         /*It's hardcoded ;) But we know that a CNP has 13 characters and that the last 4 are numbers.*/
         String letterParts="", nrParts = "";
 
-        for(int i = 0; i < 9; i++)
-        {
-            letterParts += testCNP.charAt(i);
-        }
+        sex += testCNP.charAt(0);
+
+        year += testCNP.charAt(1);
+        year += testCNP.charAt(2);
+
+        month += testCNP.charAt(3);
+        month += testCNP.charAt(4);
+
+        day += testCNP.charAt(5);
+        day += testCNP.charAt(6);
+
+        jj += testCNP.charAt(7);
+        jj += testCNP.charAt(8);
+
+        Integer nSex = Integer.parseInt(sex), nYear = Integer.parseInt(year), nMonth = Integer.parseInt(month), nDay = Integer.parseInt(day);
 
         for(int i = 9; i < 13; i++)
         {
@@ -41,16 +53,12 @@ public abstract class IClient{
         }
 
         // Create a Pattern object
-        Pattern letters = Pattern.compile(patternLetters);
-
-        // Create a Pattern object
         Pattern numbers = Pattern.compile(patternNr);
 
-        Matcher matchLetters = letters.matcher(letterParts);
         Matcher matchNumbers = numbers.matcher(nrParts);
 
-        /*If one of them is true then we have found a pattern that is not only letters, or is not only numbers.*/
-        if (matchLetters.find() || matchNumbers.find())
+        /*If true then we have found a pattern that is not only numbers or incorrect.*/
+        if (matchNumbers.find() || (nSex != 1 && nSex != 2) || (nMonth < 1 || nMonth > 12) || (nDay < 1 || nDay > 31))
         {
             patternCorrect = false;
         }
@@ -83,13 +91,12 @@ public abstract class IClient{
         this.name = name;
 
         try {
-            //setCNP(CNP);
-            this.CNP = CNP; //add the new verification later
+            setCNP(CNP);
             addFirstBank(firstBankAccount);
         }
-//        catch (IncorrectCNP incorrectCNP) {
-//            incorrectCNP.printStackTrace();
-//        }
+        catch (IncorrectCNP incorrectCNP) {
+            incorrectCNP.printStackTrace();
+        }
         catch (NoNewBankAccountException e) {
             e.printStackTrace();
         }
@@ -99,7 +106,6 @@ public abstract class IClient{
             e.printStackTrace();
         }
 
-        this.CNP = CNP;
         this.address = address;
         accounts.add(firstBankAccount);
     }
