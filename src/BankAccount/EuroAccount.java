@@ -9,6 +9,11 @@ public class EuroAccount extends BankAccount {
     private final int interestRateThreshold = 500;
     private final int ZERO = 0;
 
+    public EuroAccount(Double accountSum, Integer accountNumber)
+    {
+        super(accountSum, accountNumber);
+    }
+
     public Double getInterestRate() throws NegativeSum
     {
         interestRate = 0.0;

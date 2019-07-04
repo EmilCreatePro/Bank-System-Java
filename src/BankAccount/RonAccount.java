@@ -4,6 +4,11 @@ import CustomExceptions.*;
 
 public class RonAccount extends BankAccount{
 
+    public RonAccount(Double accountSum, Integer accountNumber)
+    {
+        super(accountSum, accountNumber);
+    }
+
     @Override
     public Double getSumFromAccount() { return accountSum; }
 
@@ -15,7 +20,7 @@ public class RonAccount extends BankAccount{
         if(this.isRonAccount() == true && baDest.isRonAccount() == true)
         {
             /*If there is enough money to transfer.*/
-            if(this.subtractSum(sum))
+            if(this.subtractSum(sum) && baDest.addSum(sum))
             {
                 transferSuccessful = true;
             }

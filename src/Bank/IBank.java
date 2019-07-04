@@ -12,6 +12,8 @@ public abstract class IBank {
     private Integer bankCode;
     private ArrayList<IClient> clients = new ArrayList<IClient>();
 
+    private final double convertFactor = 4.2000;
+
     public IBank(Integer bankCode)
     {
         this.bankCode = bankCode;
@@ -48,15 +50,26 @@ public abstract class IBank {
             {
                 retString = "CNP: " + client.getCNP() + "; Name: " + client.getName() + "; Address: " + client.getAddress() + ";\n";
                 ArrayList<BankAccount> accounts = client.getAccounts();
-                retString += "\nAccounts:\n";
+                retString += "Accounts:\n";
 
                 for(BankAccount acc :  accounts)
                 {
                     retString += "\tID: " +  acc.getAccountNumber() + "; Type: ";
-                    retString += acc.isRonAccount() == true? "RON" : "EURO";
-                    retString += "; Total_Sum: " + client.getTotalSum() + "; Daily Interest: " + client.getDailyInterestRate() + "\n";
-                }
 
+                    //retString += acc.isRonAccount() == true? "RON" : " " + acc.getSumFromAccount()*convertFactor + " EURO";
+                    //retString += "; Total_Sum: " + client.getTotalSum() + "; Daily Interest: " + client.getDailyInterestRate() + "\n";
+                    //don;t use getTotalSum
+                    if(acc.isRonAccount() == true)
+                    {
+                        retString +=  "Type: RON" + "; Sum in account: " + acc.getSumFromAccount() + "RON ; Daily Interest: " + client.getDailyInterestRate() + "\n";
+                    }
+                    else
+                    {
+                        retString +=  "Type: EURO" + "; Sum in account: " + acc.getSumFromAccount()/convertFactor + " EURO which is " + acc.getSumFromAccount() + " RON"
+                                + "; Daily Interest: " + client.getDailyInterestRate() + "\n";
+                    }
+                }
+                retString += "Total Sum: "+ client.getTotalSum() + " RON\n";
                 break;
             }
         }

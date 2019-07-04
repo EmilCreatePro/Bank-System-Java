@@ -83,12 +83,13 @@ public abstract class IClient{
         this.name = name;
 
         try {
-            setCNP(CNP);
+            //setCNP(CNP);
+            this.CNP = CNP; //add the new verification later
             addFirstBank(firstBankAccount);
         }
-        catch (IncorrectCNP incorrectCNP) {
-            incorrectCNP.printStackTrace();
-        }
+//        catch (IncorrectCNP incorrectCNP) {
+//            incorrectCNP.printStackTrace();
+//        }
         catch (NoNewBankAccountException e) {
             e.printStackTrace();
         }

@@ -6,6 +6,12 @@ public abstract class BankAccount implements TotalSum {
 
     public abstract boolean isRonAccount();
 
+    public BankAccount(Double accountSum, Integer accountNumber)
+    {
+        this.accountSum = accountSum;
+        this.accountNumber = accountNumber;
+    }
+
     public Double getAccountSum()
     {
         return accountSum;
@@ -22,6 +28,15 @@ public abstract class BankAccount implements TotalSum {
             retVal = false;
         }
         else accountSum -= sumToSubtract;
+
+        return retVal;
+    }
+
+    protected boolean addSum(Double sumToAdd)
+    {
+        boolean retVal = true;
+
+        accountSum += sumToAdd;
 
         return retVal;
     }
